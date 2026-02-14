@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Haunted House Maze 💌</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main id="app" class="app">
+
+    <!-- =========================
+         SCREEN 1: MAZE
+    ========================== -->
+    <section id="screen-maze" class="screen screen--active" aria-label="Maze Screen">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand__dot"></span>
+          <span class="brand__title">Haunted House Maze</span>
+        </div>
+
+        <button id="soundBtn" class="btn btn--ghost" type="button" aria-pressed="false">
+          🔇 Sound
+        </button>
+      </header>
+
+      <div class="maze-wrap">
+        <div class="house-frame" aria-hidden="true">
+          <div class="house-frame__inner">
+            <canvas id="mazeCanvas"></canvas>
+
+            <!-- Overlay labels -->
+            <div class="label label--start" id="startLabel">
+              <div class="label__arrow">⬅ START</div>
+            </div>
+
+            <div class="label label--exit locked" id="exitLabel">
+              <div class="label__arrow">EXIT ➡</div>
+            </div>
+
+            <!-- HUD -->
+            <div class="hud">
+              <div class="hud__pill">🎀 Move with arrows (or touch buttons)</div>
+              <div class="hud__pill hud__pill--subtle" id="objectivePill">
+                Find candy 🍬 to unlock EXIT
+              </div>
+            </div>
+
+            <!-- Toast -->
+            <div id="toast" class="toast" aria-live="polite"></div>
+
+            <!-- Sparkles -->
+            <div id="sparkleBurst" class="sparkle-burst" aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOBILE CONTROLLER -->
+      <div class="controller" aria-label="On-screen controller">
+        <button class="ctrl-btn" data-dir="up" aria-label="Up">▲</button>
+        <div class="controller__mid">
+          <button class="ctrl-btn" data-dir="left" aria-label="Left">◀</button>
+          <button class="ctrl-btn ctrl-btn--big" data-dir="down" aria-label="Down">▼</button>
+          <button class="ctrl-btn" data-dir="right" aria-label="Right">▶</button>
+        </div>
+      </div>
+
+      <footer class="footer-note">
+        <span>Tip: sound unlocks after your first tap/keypress.</span>
+      </footer>
+    </section>
+
+    <!-- =========================
+         SCREEN 2: ELIJAH’S HOUSE + ENVELOPE
+    ========================== -->
+    <section id="screen-house" class="screen" aria-label="Elijah’s House Screen">
+      <div class="hearts" id="heartsLayer" aria-hidden="true"></div>
+
+      <div class="house-scene">
+        <div class="house-scene__glow" aria-hidden="true"></div>
+
+        <div class="house-card">
+          <div class="house-illustration" aria-hidden="true">
+            <div class="roof"></div>
+            <div class="house-body">
+              <div class="window w1"></div>
+              <div class="window w2"></div>
+              <div class="door"></div>
+            </div>
+            <div class="chimney"></div>
+            <div class="moon"></div>
+          </div>
+
+          <h1 class="house-title">Elijah’s House</h1>
+          <p class="house-subtitle">I was starting to think you needed a map to find me. 🤣🤣</p>
+
+          <div class="thanks-wrap" id="thanksWrap">
+            <div class="thanks-text" id="thanksText">Thank you for finishing the maze  💌</div>
+
+            <button id="envelopeBtn" class="envelope" type="button" aria-label="Open letter">
+              <div class="env">
+                <div class="env__back"></div>
+                <div class="env__front"></div>
+                <div class="env__flap"></div>
+                <div class="env__heart">💗</div>
+                <div class="env__hint" id="envHint">Please click here</div>
+              </div>
+
+              <div class="letter" id="letter">
+                <div class="letter__paper">
+                  <div class="letter__title">💌</div>
+                  <div class="letter__body" id="letterBody"></div>
+                </div>
+              </div>
+            </button>
+          </div>
+
+          <div class="house-actions">
+            <button id="restartBtn" class="btn btn--primary" type="button">Restart</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>
