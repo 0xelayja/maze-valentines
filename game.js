@@ -874,6 +874,57 @@ I love you always.`;
     btn.addEventListener("pointerleave", endHold);
   });
 
+  // ---------- Input (Keyboard arrows with hold-to-move) ----------
+  const heldKeys = new Set();
+  let keyHoldInterval = null;
+
+  function startKeyHoldLoop() {
+    if (keyHoldInterval) return;
+    keyHoldInterval = setInterval(() => {
+      if (!screenMaze.classList.contains("screen--active")) return;
+
+      if (heldKeys.has("ArrowUp")) tryMove("up");
+      if (heldKeys.has("ArrowDown")) tryMove("down");
+      if (heldKeys.has("ArrowLeft")) tryMove("left");
+      if (heldKeys.has("ArrowRight")) tryMove("right");
+    }, 110); // matches your mobile hold speed
+  }
+
+  function stopKeyHoldLoopIfNeeded() {
+    if (heldKeys.size === 0 && keyHoldInterval) {
+      clearInterval(keyHoldInterval);
+      keyHoldInterval = null;
+    }
+  }
+
+  window.addEventListener("keydown", (e) => {
+    if (!screenMaze.classList.contains("screen--active")) return;
+    if (!["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) return;
+
+    e.preventDefault();
+    unlockAudioOnce();
+    heldKeys.add(e.key);
+
+    // immediate move on first press
+    if (e.repeat === false) {
+      const keyMap = { ArrowUp: "up", ArrowDown: "down", ArrowLeft: "left", ArrowRight: "right" };
+      tryMove(keyMap[e.key]);
+    }
+
+    startKeyHoldLoop();
+  }, { passive: false });
+
+  window.addEventListener("keyup", (e) => {
+    if (!["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) return;
+    heldKeys.delete(e.key);
+    stopKeyHoldLoopIfNeeded();
+  });
+
+  window.addEventListener("blur", () => {
+    heldKeys.clear();
+    stopKeyHoldLoopIfNeeded();
+  });
+
   // ---------- Hearts ----------
   let heartsInterval = null;
   function startHearts() {
