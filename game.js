@@ -142,7 +142,7 @@
     // BFS ring search for nearest walkable
     const q = [{ x: targetX, y: targetY }];
     const seen = new Set([`${targetX},${targetY}`]);
-    const dirs = [{dx:1,dy:0},{dx:-1,dy:0},{dx:0,dy:1},{dx:0,dy:-1}];
+    const dirs = [{ dx: 1, dy: 0 }, { dx: -1, dy: 0 }, { dx: 0, dy: 1 }, { dx: 0, dy: -1 }];
 
     while (q.length) {
       const c = q.shift();
@@ -166,7 +166,7 @@
     dist[from.y][from.x] = 0;
     q.push(from);
 
-    const dirs = [{dx:1,dy:0},{dx:-1,dy:0},{dx:0,dy:1},{dx:0,dy:-1}];
+    const dirs = [{ dx: 1, dy: 0 }, { dx: -1, dy: 0 }, { dx: 0, dy: 1 }, { dx: 0, dy: -1 }];
 
     while (q.length) {
       const c = q.shift();
@@ -260,15 +260,15 @@
   // ---------- Monsters decoration ----------
   let monsters = [];
   function placeMonsters() {
-    const base = ["👻","😈","🕷️","🧟","🦇"];
+    const base = ["👻", "😈", "🕷️", "🧟", "🦇"];
     const passages = getAllPassages();
     monsters = [];
     for (let i = 0; i < 6; i++) {
       const c = passages[Math.floor(Math.random() * passages.length)];
       // avoid key cells
       if ((c.x === startCell.x && c.y === startCell.y) ||
-          (c.x === exitCell.x && c.y === exitCell.y) ||
-          (c.x === candyCell.x && c.y === candyCell.y)) {
+        (c.x === exitCell.x && c.y === exitCell.y) ||
+        (c.x === candyCell.x && c.y === candyCell.y)) {
         i--; continue;
       }
       monsters.push({ x: c.x, y: c.y, emoji: base[i % base.length] });
@@ -535,8 +535,8 @@
     if (mazeSongTimer) { clearInterval(mazeSongTimer); mazeSongTimer = null; }
     if (houseSongTimer) { clearInterval(houseSongTimer); houseSongTimer = null; }
 
-    mazeNodes.forEach(n => { try { n.stop?.(); n.disconnect?.(); } catch(_){} });
-    houseNodes.forEach(n => { try { n.stop?.(); n.disconnect?.(); } catch(_){} });
+    mazeNodes.forEach(n => { try { n.stop?.(); n.disconnect?.(); } catch (_) { } });
+    houseNodes.forEach(n => { try { n.stop?.(); n.disconnect?.(); } catch (_) { } });
     mazeNodes = [];
     houseNodes = [];
   }
@@ -773,7 +773,7 @@
 
   // ---------- House sequence ----------
   const letterText =
-`Happy Valentine’s Day, my love ❤️
+    `Happy Valentine’s Day, my love ❤️
 
 Being with you isn’t just about the cute moments or the sweet words, it’s about the future we’re building together. You make me want to dream bigger, work harder, and become better every single day.
 
@@ -818,28 +818,35 @@ I love you always.`;
     player.hasCandy = false;
     queuedDir = null;
 
-    // re-generate maze for replay value (still hard)
-    initGame(true);
+    // stop hearts & audio cleanly
+    stopHearts?.();
 
-    // screens
+    // close envelope UI state (so it doesn’t overlay)
+    envelopeBtn.classList.remove("open");
+    envHint.classList.remove("show");
+    thanksText.classList.remove("show");
+
+    // Switch screens FIRST (make maze visible)
     screenHouse.classList.remove("screen--active");
     screenMaze.classList.add("screen--active", "fade-in");
+
+    // Remove fade class after animation
     setTimeout(() => screenMaze.classList.remove("fade-in"), 600);
 
-    // back to exciting maze sound
-    if (audioCtx && soundEnabled) startMazeMusic();
+    // IMPORTANT: wait for layout to be visible before fitting canvas + regenerating
+    requestAnimationFrame(() => {
+      // regenerate maze + reposition candy/exit (hard mode)
+      initGame(true);
 
-    draw();
+      // force a proper resize after screen is visible
+      fitCanvas();
+      draw();
+
+      // back to exciting maze sound
+      if (audioCtx && soundEnabled) startMazeMusic();
+    });
   }
 
-  // ---------- Input (Desktop) ----------
-  window.addEventListener("keydown", (e) => {
-    unlockAudioOnce();
-    if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key)) e.preventDefault();
-    const map = { ArrowUp:"up", ArrowDown:"down", ArrowLeft:"left", ArrowRight:"right" };
-    const dir = map[e.key];
-    if (dir) tryMove(dir);
-  }, { passive:false });
 
   // ---------- Input (Mobile controller press/hold) ----------
   document.querySelectorAll(".ctrl-btn").forEach(btn => {
@@ -861,7 +868,7 @@ I love you always.`;
       holdTimer = null;
     };
 
-    btn.addEventListener("pointerdown", startHold, { passive:false });
+    btn.addEventListener("pointerdown", startHold, { passive: false });
     btn.addEventListener("pointerup", endHold);
     btn.addEventListener("pointercancel", endHold);
     btn.addEventListener("pointerleave", endHold);
