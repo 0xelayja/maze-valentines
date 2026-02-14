@@ -932,3 +932,28 @@ I love you always.`;
   // start game
   initGame(false);
 })();
+
+// ===============================
+// KEYBOARD CONTROLS (ARROW KEYS)
+// ===============================
+window.addEventListener("keydown", (e) => {
+  // Prevent page scrolling with arrows
+  if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+    e.preventDefault();
+  }
+
+  switch (e.key) {
+    case "ArrowUp":
+      tryMove("up");
+      break;
+    case "ArrowDown":
+      tryMove("down");
+      break;
+    case "ArrowLeft":
+      tryMove("left");
+      break;
+    case "ArrowRight":
+      tryMove("right");
+      break;
+  }
+});
