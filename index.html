@@ -25,43 +25,47 @@
       </header>
 
       <div class="maze-wrap">
-        <div class="house-frame" aria-hidden="true">
+        <div class="house-frame">
           <div class="house-frame__inner">
-            <canvas id="mazeCanvas"></canvas>
 
-            <!-- Overlay labels -->
-            <div class="label label--start" id="startLabel">
-              <div class="label__arrow">⬅ START</div>
-            </div>
-
-            <div class="label label--exit locked" id="exitLabel">
-              <div class="label__arrow">EXIT ➡</div>
-            </div>
-
-            <!-- HUD -->
-            <div class="hud">
+            <!-- HUD moved ABOVE the canvas (won't cover map anymore) -->
+            <div class="maze-hudbar" aria-label="Instructions">
               <div class="hud__pill">🎀 Move with arrows (or touch buttons)</div>
               <div class="hud__pill hud__pill--subtle" id="objectivePill">
-                Find candy 🍬 to unlock EXIT
+                Find the candy 🍬 (far away) to unlock EXIT
               </div>
             </div>
 
-            <!-- Toast -->
-            <div id="toast" class="toast" aria-live="polite"></div>
+            <!-- Canvas wrapper for overlays (toast + sparkles) -->
+            <div class="maze-canvas-wrap">
+              <canvas id="mazeCanvas"></canvas>
 
-            <!-- Sparkles -->
-            <div id="sparkleBurst" class="sparkle-burst" aria-hidden="true"></div>
+              <div id="toast" class="toast" aria-live="polite"></div>
+              <div id="sparkleBurst" class="sparkle-burst" aria-hidden="true"></div>
+            </div>
+
+            <!-- Start/Exit labels moved OUTSIDE the map (below canvas) -->
+            <div class="maze-footer">
+              <div class="label label--start" id="startLabel">
+                <div class="label__arrow">⬅ START</div>
+              </div>
+
+              <div class="label label--exit locked" id="exitLabel">
+                <div class="label__arrow">EXIT ➡</div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
 
-      <!-- MOBILE CONTROLLER -->
+      <!-- MOBILE CONTROLLER (fixed bottom center) -->
       <div class="controller" aria-label="On-screen controller">
-        <button class="ctrl-btn" data-dir="up" aria-label="Up">▲</button>
-        <div class="controller__mid">
-          <button class="ctrl-btn" data-dir="left" aria-label="Left">◀</button>
-          <button class="ctrl-btn ctrl-btn--big" data-dir="down" aria-label="Down">▼</button>
-          <button class="ctrl-btn" data-dir="right" aria-label="Right">▶</button>
+        <div class="dpad">
+          <button class="ctrl-btn ctrl-btn--up" data-dir="up" aria-label="Up">▲</button>
+          <button class="ctrl-btn ctrl-btn--left" data-dir="left" aria-label="Left">◀</button>
+          <button class="ctrl-btn ctrl-btn--down ctrl-btn--big" data-dir="down" aria-label="Down">▼</button>
+          <button class="ctrl-btn ctrl-btn--right" data-dir="right" aria-label="Right">▶</button>
         </div>
       </div>
 
@@ -92,10 +96,10 @@
           </div>
 
           <h1 class="house-title">Elijah’s House</h1>
-          <p class="house-subtitle">I was starting to think you needed a map to find me. 🤣🤣</p>
+          <p class="house-subtitle">Soft spooky + Valentine vibes 💗</p>
 
           <div class="thanks-wrap" id="thanksWrap">
-            <div class="thanks-text" id="thanksText">Thank you for finishing the maze  💌</div>
+            <div class="thanks-text" id="thanksText">Thank you for finishing the maze 💌</div>
 
             <button id="envelopeBtn" class="envelope" type="button" aria-label="Open letter">
               <div class="env">
