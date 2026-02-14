@@ -934,26 +934,32 @@ I love you always.`;
 })();
 
 // ===============================
-// KEYBOARD CONTROLS (ARROW KEYS)
+// ADVANCED KEYBOARD CONTROLS
 // ===============================
-window.addEventListener("keydown", (e) => {
-  // Prevent page scrolling with arrows
-  if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
-    e.preventDefault();
-  }
+const activeKeys = new Set();
+let keyInterval = null;
 
-  switch (e.key) {
-    case "ArrowUp":
-      tryMove("up");
-      break;
-    case "ArrowDown":
-      tryMove("down");
-      break;
-    case "ArrowLeft":
-      tryMove("left");
-      break;
-    case "ArrowRight":
-      tryMove("right");
-      break;
+window.addEventListener("keydown", (e) => {
+  if (!["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) return;
+
+  e.preventDefault();
+  activeKeys.add(e.key);
+
+  if (!keyInterval) {
+    keyInterval = setInterval(() => {
+      if (activeKeys.has("ArrowUp")) tryMove("up");
+      if (activeKeys.has("ArrowDown")) tryMove("down");
+      if (activeKeys.has("ArrowLeft")) tryMove("left");
+      if (activeKeys.has("ArrowRight")) tryMove("right");
+    }, 110); // matches mobile hold timing
+  }
+});
+
+window.addEventListener("keyup", (e) => {
+  activeKeys.delete(e.key);
+
+  if (activeKeys.size === 0 && keyInterval) {
+    clearInterval(keyInterval);
+    keyInterval = null;
   }
 });
